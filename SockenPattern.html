@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Socken-Rechner – Anschlagmaschen</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
+    label { display:block; margin-top: 12px; font-weight: 600; }
+    input, select { width: 100%; padding: 10px; margin-top: 6px; font-size: 16px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result { margin-top: 16px; padding: 12px; border-radius: 10px; background: #f7f7f7; font-size: 18px; }
+    .muted { color:#666; font-size: 13px; margin-top: 8px; }
+    button { margin-top: 12px; padding: 10px 12px; font-size: 16px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <h1>Socken-Rechner</h1>
+  <p class="muted">Berechnet Anschlagmaschen aus Maschenprobe und Fußumfang. (Einheiten: cm)</p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label for="g">Maschen pro 10 cm</label>
+        <input id="g" inputmode="decimal" placeholder="z. B. 28" />
+      </div>
+      <div>
+        <label for="c">Fußumfang (cm)</label>
+        <input id="c" inputmode="decimal" placeholder="z. B. 22" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="e">Negative Ease</label>
+        <select id="e">
+          <option value="0.85">15% (eng)</option>
+          <option value="0.90" selected>10% (Standard)</option>
+          <option value="0.95">5% (locker)</option>
+          <option value="1.00">0% (keine)</option>
+        </select>
+      </div>
+      <div>
+        <label for="r">Rundung auf Vielfaches von</label>
+        <select id="r">
+          <option value="4" selected>4 Maschen</option>
+          <option value="8">8 Maschen</option>
+          <option value="2">2 Maschen</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result" id="out">Bitte Werte eingeben.</div>
+
+    <button id="copy">Link mit diesen Werten kopieren</button>
+    <div class="muted" id="copymsg"></div>
+
+    <p class="muted">
+      Formel: sts/cm = (Maschen/10cm)/10 · Umfang_eff = Umfang·Ease · Anschlag = rund(Umfang_eff·sts/cm) auf Vielfaches.
+    </p>
+  </div>
+
+  <script>
+    function parseNum(x) {
+      if (x == null) return NaN;
+      return parseFloat(String(x).replace(",", "."));
+    }
+    function roundToMultiple(x, m) {
+      return Math.round(x / m) * m;
+    }
+
+    const elG = document.getElementById("g");
+    const elC = document.getElementById("c");
+    const elE = document.getElementById("e");
+    const elR = document.getElementById("r");
+    const out = document.getElementById("out");
+
+    function calc() {
+      const g = parseNum(elG.value);
+      const c = parseNum(elC.value);
+      const e = parseNum(elE.value);
+      const r = parseNum(elR.value);
+
+      if (!(g > 0) || !(c > 0)) {
+        out.textContent = "Bitte gültige Zahlen für Gauge und Fußumfang eingeben.";
+        return;
+      }
+      const stsPerCm = g / 10.0;
+      const effectiveCirc = c * e;
+      const raw = effectiveCirc * stsPerCm;
+      const castOn = roundToMultiple(raw, r);
+
+      out.innerHTML = `<strong>Anschlag:</strong> ${castOn} Maschen<br>
+                       <span class="muted">Rohwert: ${raw.toFixed(2)} → gerundet auf ${r}</span>`;
+    }
+
+    // URL-Parameter lesen
+    const params = new URLSearchParams(location.search);
+    if (params.has("g")) elG.value = params.get("g");
+    if (params.has("c")) elC.value = params.get("c");
+    if (params.has("e")) elE.value = params.get("e");
+    if (params.has("r")) elR.value = params.get("r");
+
+    // Auto berechnen + Live-Updates
+    ["input", "change"].forEach(ev => {
+      elG.addEventListener(ev, calc);
+      elC.addEventListener(ev, calc);
+      elE.addEventListener(ev, calc);
+      elR.addEventListener(ev, calc);
+    });
+    calc();
+
+    // Link kopieren
+    document.getElementById("copy").addEventListener("click", async () => {
+      const g = encodeURIComponent(elG.value);
+      const c = encodeURIComponent(elC.value);
+      const e = encodeURIComponent(elE.value);
+      const r = encodeURIComponent(elR.value);
+      const url = `${location.origin}${location.pathname}?g=${g}&c=${c}&e=${e}&r=${r}`;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        document.getElementById("copymsg").textContent = "Link kopiert ✅";
+      } catch {
+        document.getElementById("copymsg").textContent = "Kopieren ging nicht (Browser-Einstellung). URL oben in der Adresszeile steht aber korrekt.";
+      }
+    });
+  </script>
+</body>
+</html>
