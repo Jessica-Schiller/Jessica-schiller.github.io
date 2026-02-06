@@ -5,6 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
+    <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
+    label { display:block; margin-top: 12px; font-weight: 600; }
+    input, select { width: 100%; padding: 10px; margin-top: 6px; font-size: 16px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result { margin-top: 16px; padding: 12px; border-radius: 10px; background: #f7f7f7; font-size: 18px; }
+    .muted { color:#666; font-size: 13px; margin-top: 8px; }
+    button { margin-top: 12px; padding: 10px 12px; font-size: 16px; cursor:pointer; }
+  </style>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -14,254 +24,121 @@
     <link rel="stylesheet" href="CSS/index.css">
   </head>
 
-<style>
 
-  /* Allgemein */
-
-  /* Card */
-  .card {
-    background-color: rgb(42, 42, 42);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-  }
-
-  .card-body-15 {
-    padding: 15%;
-  }
-
-  .card-body-n {
-    padding: 8% 8% 4% 8%;
-  }
-
-  .imgsize {
-    width: 100%;
-    border-radius: 5px;
-  }
-
-
-/* Carousel */
-      [data-bs-theme=dark] .carousel .carousel-indicators [data-bs-target], [data-bs-theme=dark].carousel .carousel-indicators [data-bs-target] {
-          background-color: white;
-      }
-
-      [data-bs-theme=dark] .carousel .carousel-control-next-icon, [data-bs-theme=dark] .carousel .carousel-control-prev-icon, [data-bs-theme=dark].carousel .carousel-control-next-icon, [data-bs-theme=dark].carousel .carousel-control-prev-icon {
-          filter: invert(0) grayscale(100);
-      }
-
-
-      a {
-    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
-    text-decoration: none;
-}
-
-
-/* Container holding the image and the text */
-.container-startscreen {
-  position: relative;
-  color: white;
-  margin-bottom: 100px;
-}
-
- /* Drawings */
-
-    .bild2 {
-        max-width: 100%;
-        height: 100%;
-        border-radius: 10px;
-    }
-
-    .wid{
-      max-width: 70%;
-        height: 100%;
-        border-radius: 10px;
-    }
-
-    /* WorkaltCSS */
-    .original {
-        position: relative;
-        top: 200px;
-
-    }
-
-    .hash {
-        text-decoration: none;
-        color: white;
-    }
-
-    .modal-dialog {
-        width: 100%
-    }
-
-
-    .center {
-        justify-content: center;
-        display: flex;
-    }
-
-    .img:hover {
-        filter: brightness(50%);
-        transition: 0.3s;
-    }
-
-    p{
-      padding-top: 20px;
-    }
-
-.pfeil{
-  position: absolute;
-  left: 45%;
-  width: 6%;
-  top: 80%;
-}
-
-.pfeil:hover{
-  filter: invert();
-}
-
-.nav{
-  flex-wrap: nowrap;
-}
-
-
-@media (max-width: 768px){
-  .hrtop {
-    margin: 400px 15% 60px;
-}
-.nav-link{
-  margin: 0px;
-}
-}
-
-@media (min-width: 768px){
-  .hrtop {
-    margin: 200px 15% 60px;
-}
-}
-
-@media (min-width: 992px){
-  .hrtop {
-    margin: 100px 15% 60px;
-}
-}
-
-</style>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-      // Hide all category contents
-      var categories = document.querySelectorAll(".item .original");
-      categories.forEach(function (category) {
-          category.style.display = "none";
-      });
-
-      // Show the default category content
-      var defaultCategory = document.querySelector(".item .hash");
-      var defaultContent = defaultCategory.querySelector(".original");
-      defaultContent.style.display = "inline";
-
-      // Add event listeners to each category link to toggle visibility
-      var categoryLinks = document.querySelectorAll(".item .hash");
-      categoryLinks.forEach(function (link) {
-          link.addEventListener("click", function (event) {
-              event.preventDefault();
-              categories.forEach(function (category) {
-                  category.style.display = "none";
-              });
-              var selectedCategory = link.querySelector(".original");
-              selectedCategory.style.display = "inline";
-          });
-      });
-  });
-</script>
 
 <body>
+  <h1>Socken-Rechner</h1>
+  <p class="muted">Berechnet Anschlagmaschen aus Maschenprobe und Fußumfang. (Einheiten: cm)</p>
 
-  <header>
-    <nav class="navbar fixed-top navbar-expand-md">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html"><img src="Bilder/Logo.png"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link gelb" aria-current="page" href="index.html">Portfolio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="About.html">About</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Work</a>
-              <ul class="dropdown-menu">
-                <!-- <li><a class="dropdown-item" href="HTML/Projects.html">Overview</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li> -->
-                <li><a class="dropdown-item" href="HTML/TUI.html">Homeoffice Buddy</a></li>
-                <li><a class="dropdown-item" href="HTML/Moodify.html">Moodify</a></li>
-                <li><a class="dropdown-item" href="HTML/WebDev.html">Web Development</a></li>
-                <li><a class="dropdown-item" href="HTML/EHR.html">EHR Integration</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Other</a>
-              <ul class="dropdown-menu">
-                <!-- <li><a class="dropdown-item" href="HTML/Projects.html">Overview</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li> -->
-                <li><a class="dropdown-item" href="Print.html">Print & Packaging</a></li>
-                <li><a class="dropdown-item" href="Graphics.html">Graphics</a></li>
-                <li><a class="dropdown-item" href="Photography.html">Photography</a></li>
-                <li><a class="dropdown-item" href="Drawings.html">Drawings</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+  <div class="card">
+    <div class="row">
+      <div>
+        <label for="g">Maschen pro 10 cm</label>
+        <input id="g" inputmode="decimal" placeholder="z. B. 28" />
       </div>
-    </nav>
-  </header>
-
-
-  <main>
-    <br>
-    <br>
-    <h2>Playground / Other Work</h2>
-    <h1 class="gelb">Drawings</h1>
-    <br>
-    <br>
-      <div class="container text-center">
-        <div class="row row-cols-5 g-3">
-            <div class="col"><img src="Bilder/Projects/Drawings/z-acrylauge.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-acrylauge2.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-acrylmaedchen.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-banane.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-blaulila.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-voegel.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-vogel.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-farbenmaedchen.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-lilly.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Mädchen.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Portrait.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Farbe.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Giraffe.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-kirsche.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Erdbeere.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Haus.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-Auge.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-skizze.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-bleistift.jpg" class="bild2" /></div>
-            <div class="col"><img src="Bilder/Projects/Drawings/z-fisch.jpg" class="bild2" /></div>
-        </div>
+      <div>
+        <label for="c">Fußumfang (cm)</label>
+        <input id="c" inputmode="decimal" placeholder="z. B. 22" />
       </div>
+    </div>
 
+    <div class="row">
+      <div>
+        <label for="e">Negative Ease</label>
+        <select id="e">
+          <option value="0.85">15% (eng)</option>
+          <option value="0.90" selected>10% (Standard)</option>
+          <option value="0.95">5% (locker)</option>
+          <option value="1.00">0% (keine)</option>
+        </select>
+      </div>
+      <div>
+        <label for="r">Rundung auf Vielfaches von</label>
+        <select id="r">
+          <option value="4" selected>4 Maschen</option>
+          <option value="8">8 Maschen</option>
+          <option value="2">2 Maschen</option>
+        </select>
+      </div>
+    </div>
 
+    <div class="result" id="out">Bitte Werte eingeben.</div>
 
-  </main>
+    <button id="copy">Link mit diesen Werten kopieren</button>
+    <div class="muted" id="copymsg"></div>
+
+    <p class="muted">
+      Formel: sts/cm = (Maschen/10cm)/10 · Umfang_eff = Umfang·Ease · Anschlag = rund(Umfang_eff·sts/cm) auf Vielfaches.
+    </p>
+  </div>
+
+  <script>
+    function parseNum(x) {
+      if (x == null) return NaN;
+      return parseFloat(String(x).replace(",", "."));
+    }
+    function roundToMultiple(x, m) {
+      return Math.round(x / m) * m;
+    }
+
+    const elG = document.getElementById("g");
+    const elC = document.getElementById("c");
+    const elE = document.getElementById("e");
+    const elR = document.getElementById("r");
+    const out = document.getElementById("out");
+
+    function calc() {
+      const g = parseNum(elG.value);
+      const c = parseNum(elC.value);
+      const e = parseNum(elE.value);
+      const r = parseNum(elR.value);
+
+      if (!(g > 0) || !(c > 0)) {
+        out.textContent = "Bitte gültige Zahlen für Gauge und Fußumfang eingeben.";
+        return;
+      }
+      const stsPerCm = g / 10.0;
+      const effectiveCirc = c * e;
+      const raw = effectiveCirc * stsPerCm;
+      const castOn = roundToMultiple(raw, r);
+
+      out.innerHTML = `<strong>Anschlag:</strong> ${castOn} Maschen<br>
+                       <span class="muted">Rohwert: ${raw.toFixed(2)} → gerundet auf ${r}</span>`;
+    }
+
+    // URL-Parameter lesen
+    const params = new URLSearchParams(location.search);
+    if (params.has("g")) elG.value = params.get("g");
+    if (params.has("c")) elC.value = params.get("c");
+    if (params.has("e")) elE.value = params.get("e");
+    if (params.has("r")) elR.value = params.get("r");
+
+    // Auto berechnen + Live-Updates
+    ["input", "change"].forEach(ev => {
+      elG.addEventListener(ev, calc);
+      elC.addEventListener(ev, calc);
+      elE.addEventListener(ev, calc);
+      elR.addEventListener(ev, calc);
+    });
+    calc();
+
+    // Link kopieren
+    document.getElementById("copy").addEventListener("click", async () => {
+      const g = encodeURIComponent(elG.value);
+      const c = encodeURIComponent(elC.value);
+      const e = encodeURIComponent(elE.value);
+      const r = encodeURIComponent(elR.value);
+      const url = `${location.origin}${location.pathname}?g=${g}&c=${c}&e=${e}&r=${r}`;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        document.getElementById("copymsg").textContent = "Link kopiert ✅";
+      } catch {
+        document.getElementById("copymsg").textContent = "Kopieren ging nicht (Browser-Einstellung). URL oben in der Adresszeile steht aber korrekt.";
+      }
+    });
+  </script>
+
   <hr>
   <footer>
     <div id="footer">
